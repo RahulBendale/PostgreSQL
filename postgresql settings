@@ -1,0 +1,39 @@
+https://linuxize.com/post/how-to-install-rpm-packages-on-centos/
+
+
+What is WAL?
+	WAL is short for Write Ahead Log.
+	transaction performed on the database is first written out as a WAL file
+	then applied to the actual data files.
+	WAL files are strictly sequential	
+	"replay log" of changes.
+
+So are they actual files/location?
+	Located under data_directory as pg_wal
+	/var/lib/pgsql/12/data/pg_wal
+
+
+How to control wal?
+	wal_keep_segments (specifies the minimum number of the past log files segments kept in the pg_xlog direcory)
+	max_wal_size      (Maximum size to let the WAL grow as soft limit)
+
+ARCHIVING WALS
+	copying out generated WAL files is called archiving.
+
+The ARCHIVE COMMAND
+	The script is set using the archive_command configuration setting
+
+	# Copy the file to a safe loation (like a mounted NFS volume)
+	archive_command = 'cp %p /mnt/nfs/%f'
+
+	# Not overwriting files is a good practice
+	archive_command = 'test ! -f /mnt/nfs/%f && cp %p /mnt/nfs/%f'
+
+	#Copy to s3 bucket
+	archive_command = 's3cmd put %p s3://BUCKET/PATH/%f'
+
+	#Copy to googole cloud bucket
+	archive_command = 'gsutil cp %p gs://BUCKET/PATH/%f'
+
+	#An external script
+
