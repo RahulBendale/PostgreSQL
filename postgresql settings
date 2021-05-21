@@ -1,5 +1,5 @@
 https://linuxize.com/post/how-to-install-rpm-packages-on-centos/
-
+Source:- https://www.youtube.com/watch?v=X0WoSU2zhrs
 
 What is WAL?
 	WAL is short for Write Ahead Log.
@@ -18,9 +18,11 @@ How to control wal?
 	max_wal_size      (Maximum size to let the WAL grow as soft limit)
 
 ARCHIVING WALS
+**************
 	copying out generated WAL files is called archiving.
 
-The ARCHIVE COMMAND
+The ARCHIVE COMMANDS
+********************
 	The script is set using the archive_command configuration setting
 
 	# Copy the file to a safe loation (like a mounted NFS volume)
@@ -36,4 +38,84 @@ The ARCHIVE COMMAND
 	archive_command = 'gsutil cp %p gs://BUCKET/PATH/%f'
 
 	#An external script
+	archive_command = '/opt/scripts/archive_wal %p'
+	
+The WAL LEVEL:
+*************
+	minimal wal level.
+		information needed to recover from a crash or immediate shutdown
+	
+	archive (or replica in version 9.6 and above)
+	
+	replica
+		information required to run read-only queries on a standby server.
 
+	logical
+		exact logical change sets from WAL.
+
+ARCHIVE TIMEOUT
+***************
+	no activity then generate a wal after mentioned interval of time.
+		archive_timeout = 1h
+
+How to control size and the number of the WAL files
+	#This is the soft upper limit on the total size of WAL files.
+		max_wal_size = 1GB
+
+	#Keep around at least these many WAL files (aka segments).
+		wal_keep_segments = 10
+
+THE ARCHIVAL SETTINGS
+
+	#The WAL level must be archive or higher.
+		wal_level = replica
+	
+	#This is a soft upper limit on the total size of WAL files.
+		max_wal_size = 1GB
+		
+
+	#Keep around at least these many WAL files (aka segments).
+		wal_keep_segments = 10
+
+THE ARCHIVAL SETTINGS
+
+	# The WAL level must be archive or higher.
+		wal_level = replica
+	
+	# This is a soft upper limit on the total size of WAL files.
+		max_wal_size = 1GB
+			alter system set max_wal_size = '1 GB';
+
+	# Keep around at least these many WAL files (aka segments).
+		wal_keep_segments = 10
+			alter system set wal_keep_segments = 10;
+
+	# The archive mode must be set to on for archiving to happen.
+		archive_mode = on
+			alter system set archive_mode = on;
+	
+	# This is the command to invoke for each WAL file to be archived.
+		archive_command = '/postgres/logs/archive_wal %p'
+			alter system set archive_command = '/postgres/logs/archive_wal%f'
+			alter system set archive_command = 'cp %p /postgres/logs/archive_wal%f';
+			'cp %p /Archive/location/%f'
+
+
+# Ensure there is atleast one wal file for each "archive_timeout" duration.
+	archive_timeout = 1h
+		alter system set archive_timeout= '1 h';
+
+
+
+sudo systemctl restart postgresql-12
+
+Verifications.
+
+show wal_level;
+show max_wal_size;
+show wal_keep_segments;
+show archive_mode;
+show archive_command;
+show archive_timeout;
+
+du -su *
