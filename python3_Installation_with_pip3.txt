@@ -1,0 +1,106 @@
+cat << EOF >> /etc/yum.repos.d/epel-release.repo
+[epel-release]
+name=epel-release -
+baseurl=https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/
+enabled=1
+gpgcheck=0
+EOF
+
+
+sudo yum install epel-release
+
+
+Source:- https://www.rosehosting.com/blog/how-to-install-python-3-6-4-on-centos-7/
+
+Install Python 3.6.4 on CentOS 7 From a Repository
+**************************************************
+
+Step 1: Open a Terminal and add the repository to your Yum install.
+
+$sudo yum install -y https://repo.ius.io/ius-release-el7.rpm
+
+Step 2: Update Yum to finish adding the repository.
+
+$sudo yum update
+
+Step 3: Download and install Python.
+
+This will not only install Python – but it will also install pip to help you with installing add-ons.
+
+$sudo yum install -y python36u python36u-libs python36u-devel python36u-pip
+
+Once these commands are executed, simply check if the correct version of Python has been installed by executing the following command:
+
+python3.6 -V
+
+
+Source:- https://www.unixarena.com/2019/06/how-to-install-pip-on-rhel-7-centos-7.html/
+
+How to install pip3 on RHEL 7 / CentOS 7:  (Can co-exists with pip2)
+***************************************
+
+1. Download “get-pip.py” . (Refer Step 3 – Pip2 )
+
+[root@ansible-server ~]# curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+
+
+If you received the following SSL certificate error, use “–insercure” flag
+curl performs SSL certificate verification by default, using a “bundle” of Certificate Authority (CA) public keys (CA certs). If the default bundle file isn’t adequate, you can specify an alternate file using the –cacert option.
+
+If this HTTPS server uses a certificate signed by a CA represented in the bundle, the certificate verification probably failed due to a problem with the certificate (it might be expired, or the name might not match the domain name in the URL).   If you’d like to turn off curl’s verification of the certificate, use
+the -k (or –insecure) option.
+
+
+# curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py --insecure
+
+
+2. Locate python 3.x binary.
+
+[root@ansible-server ~]# which python3
+/usr/bin/python3
+
+[root@ansible-server ~]# file /usr/bin/python3
+/usr/bin/python3: symbolic link to `python3.4'
+
+[root@ansible-server ~]# file /usr/bin/python3.4
+/usr/bin/python3.4: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.32, BuildID[sha1]=66ec5b393626018f73af659b45745b161263fee9, stripped
+
+
+3. Run the following command to install pip3 on your system.
+
+[root@ansible-server ~]# /usr/bin/python3 get-pip.py
+Collecting pip
+  Downloading https://files.pythonhosted.org/packages/5c/e0/be401c003291b56efc55aeba6a80ab790d3d4cece2778288d65323009420/pip-19.1.1-py2.py3-none-any.whl (1.4MB)
+     |████████████████████████████████| 1.4MB 293kB/s
+Collecting wheel
+  Downloading https://files.pythonhosted.org/packages/bb/10/44230dd6bf3563b8f227dbf344c908d412ad2ff48066476672f3a72e174e/wheel-0.33.4-py2.py3-none-any.whl
+Installing collected packages: pip, wheel
+Successfully installed pip-19.1.1 wheel-0.33.4
+
+
+4. verify the pip version.
+
+[root@ansible-server ~]# pip --version
+pip 19.1.1 from /usr/lib/python3.4/site-packages/pip (python 3.4)
+
+
+5. pip2 can be still accessed using pip2 command.
+
+[root@ansible-server ~]# pip2 --version
+pip 19.1.1 from /usr/lib/python2.7/site-packages/pip (python 2.7)
+
+
+6. You could simply replace the default (/usr/bin/pip) pip with the required version of pip binary.
+
+[root@ansible-server ~]# ls -lrt /usr/bin/pip
+-rwxr-xr-x 1 root root 215 Mar 13 02:02 /usr/bin/pip
+
+[root@ansible-server ~]# ls -lrt /usr/bin/pip3
+-rwxr-xr-x 1 root root 215 Mar 13 02:02 /usr/bin/pip3
+
+[root@ansible-server ~]# ls -lrt /usr/bin/pip2
+-rwxr-xr-x 1 root root 214 Mar 13 01:57 /usr/bin/pip2
+[root@ansible-server ~]#
+ 
+
+We have successfully installed pip2 and pip3. Hope this article is informative to you.
