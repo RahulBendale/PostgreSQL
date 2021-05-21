@@ -1,0 +1,5 @@
+pip3 install patroni
+
+pip3 install psycopg2-binary
+
+patroni --version
