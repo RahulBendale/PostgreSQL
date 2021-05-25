@@ -119,3 +119,14 @@ show archive_command;
 show archive_timeout;
 
 du -su *
+
+postgres=# \du
+
+postgres=# CREATE USER replicator WITH PASSWORD 'replicator';
+
+postgres=# \du
+
+postgres=# \q
+-bash-4.2$ exit
+logout
+# patronictl -c /opt/app/patroni/etc/postgresql.yml list                --Command to check postgrssql.yml file config
