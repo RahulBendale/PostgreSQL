@@ -1,3 +1,5 @@
+Source: https://www.youtube.com/watch?v=xzFlxIAeX60
+
 Step 1: Install pgbouncer
 
 yum install pgbouncer
